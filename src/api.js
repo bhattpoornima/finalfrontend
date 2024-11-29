@@ -43,7 +43,7 @@ export const createEvent = async (eventData, token) => {
   return response.json();
 };
 
-export const registerForEvent = async (token, userId) => {
+export const registerForEvent = async (eventId, token, userId) => {
   try {
     const response = await fetch(`${API_URL}/api/events/${eventId}/register`, {
       method: 'POST',
