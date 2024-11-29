@@ -1,9 +1,11 @@
-module.exports = function override(config) {
-  config.resolve.fallback = {
-    crypto: require.resolve('crypto-browserify'),
-    util: require.resolve('util/'),
-    stream: require.resolve('stream-browserify'),
-    buffer: require.resolve('buffer/')  // Add this line for 'buffer' polyfill
-  };
-  return config;
+const path = require('path');
+
+module.exports = {
+  webpack: (config) => {
+    // Adding polyfill for 'process'
+    config.resolve.fallback = {
+      process: require.resolve('process/browser'),
+    };
+    return config;
+  },
 };
