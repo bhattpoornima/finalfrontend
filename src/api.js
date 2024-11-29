@@ -43,15 +43,28 @@ export const createEvent = async (eventData, token) => {
   return response.json();
 };
 
-export const registerForEvent = async (eventId, token) => {
-  const response = await fetch(`${API_URL}/api/events/${eventId}/register`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  return response.json();
+export const registerForEvent = async (token, userId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/events/${eventId}/register`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json', // Send the body as JSON
+      },
+      body: JSON.stringify({ userId }), // Send userId in the body if needed
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Registration failed:', error.message);
+    return { error: error.message };
+  }
 };
+
 
 export const updateEvent = async (eventId, eventData, token) => {
   const response = await fetch(`${API_URL}/api/events/${eventId}`, {
