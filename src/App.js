@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import SignInPage from './pages/SignInPage'; // Import SignInPage
 import EventForm from './components/EventForm';
 import MyEventsPage from './pages/MyEventsPage'; // Import MyEventsPage
+import EventDetails from './components/EventDetails';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/events/add" element={<EventForm isEdit={false} />} />
         <Route path="/events/:id/edit" element={<EventForm isEdit={true} />} />
         <Route path="/my-events" element={<MyEventsPage />} />
+        <Route path="/event/:eventId" element={<EventDetails />} />
       </Routes>
     </Router>
   );
