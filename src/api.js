@@ -79,11 +79,25 @@ export const updateEvent = async (eventId, eventData, token) => {
 };
 
 export const deleteEvent = async (eventId, token) => {
-  const response = await fetch(`${API_URL}/api/events/${eventId}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/events/${eventId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json', // Optional, but good to specify
+      },
+    });
+
+    if (!response.ok) {
+      // Handle non-2xx status codes
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    return await response.json(); // Return the response if successful
+  } catch (error) {
+    // Catch any errors and log them
+    console.error('Deletion failed:', error.message);
+    return { error: error.message }; // Return error message for the UI
+  }
 };
+

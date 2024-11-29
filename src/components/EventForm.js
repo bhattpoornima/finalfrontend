@@ -1,7 +1,6 @@
-// src/components/EventForm.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createEvent, updateEvent } from '../api';
+import { createEvent, updateEvent, deleteEvent } from '../api'; // Assuming deleteEvent is added to api.js
 
 const EventForm = ({ isEdit }) => {
   const [name, setName] = useState('');
@@ -15,8 +14,39 @@ const EventForm = ({ isEdit }) => {
 
   useEffect(() => {
     if (isEdit) {
-      // Fetch event data for editing here
-      // For example: fetchEventById(id) and set state
+      // Fetch event data for editing
+      // You can fetch the event here and populate the fields for editing
+      // Example:
+      // fetchEventById(id) and set the form state accordingly
+      // (Implement this if you are fetching data for the edit case)
+      const fetchEventById = async (id) => {
+        const token = localStorage.getItem('token');
+        try {
+          const response = await fetch(`${API_URL}/api/events/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          if (data) {
+            setName(data.name);
+            setDate(data.date);
+            setStartTime(data.startTime);
+            setEndTime(data.endTime);
+            setLocation(data.location);
+            setDescription(data.description);
+          }
+        } catch (error) {
+          console.error('Error fetching event data', error);
+        }
+      };
+      
+      useEffect(() => {
+        if (isEdit && id) {
+          fetchEventById(id);
+        }
+      }, [isEdit, id]);
+      
     }
   }, [isEdit, id]);
 
@@ -24,12 +54,20 @@ const EventForm = ({ isEdit }) => {
     e.preventDefault();
     const eventData = { name, date, startTime, endTime, location, description };
     const token = localStorage.getItem('token');
+
     if (isEdit) {
-      await updateEvent(id, eventData, token);
+      await updateEvent(id, eventData, token); // Update event
     } else {
-      await createEvent(eventData, token);
+      await createEvent(eventData, token); // Create event
     }
+
     navigate('/');
+  };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem('token');
+    await deleteEvent(id, token); // Call delete function
+    navigate('/'); // Redirect after delete
   };
 
   return (
@@ -67,6 +105,13 @@ const EventForm = ({ isEdit }) => {
         onChange={(e) => setDescription(e.target.value)}
       />
       <button type="submit">{isEdit ? 'Update Event' : 'Create Event'}</button>
+      
+      {/* Add Delete Button for Edit Mode */}
+      {isEdit && (
+        <button type="button" onClick={handleDelete}>
+          Delete Event
+        </button>
+      )}
     </form>
   );
 };
