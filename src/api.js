@@ -1,6 +1,4 @@
 // src/api.js
-import jwt from 'jsonwebtoken'; // Ensure this import exists at the top of your file
-import React from 'react'; 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 // If you are using the jsonwebtoken library for encoding/decoding JWT tokens
 
@@ -35,17 +33,15 @@ export const fetchUserEvents = async (token) => {
 };
 
 export const createEvent = async (eventData, token) => {
-  const userId = jwt.decode(token).userId; // Assuming the token contains the userId (adjust as needed)
-  const eventWithUserId = { ...eventData, createdBy: userId };
-
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
+    // Sending the eventData directly to the backend
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events/add`, { // Ensure correct route here
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`, // Ensure the token is sent correctly
       },
-      body: JSON.stringify(eventWithUserId), // Send the event with createdBy
+      body: JSON.stringify(eventData), // Send the event data, no need to add 'createdBy' here
     });
 
     const data = await response.json();
@@ -54,12 +50,13 @@ export const createEvent = async (eventData, token) => {
       throw new Error(data.message || 'Failed to create event');
     }
 
-    return data; // return the created event data
+    return data; // Return the created event data
   } catch (error) {
     console.error('Error creating event:', error);
     throw error; // propagate error
   }
 };
+
 
 export const registerForEvent = async (eventId, token, userId) => {
   try {
