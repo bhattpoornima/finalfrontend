@@ -1,0 +1,19 @@
+.homepage-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background */
+    min-height: 100vh;
+  }
+  
+  .welcome-text {
+    font-size: 3rem; /* Large font size */
+    font-weight: bold;
+    color: #4a90e2; /* A soft blue color */
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+  }
+  
+  .homepage-container h2 {
+    margin-top: 40px;
+  }
+  

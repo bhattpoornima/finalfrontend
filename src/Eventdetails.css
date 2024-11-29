@@ -1,0 +1,34 @@
+/* src/styles/EventDetails.css */
+.event-details {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .event-details h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .event-details p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  
+  .event-details button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .event-details button:hover {
+    background-color: #0056b3;
+  }
+  
