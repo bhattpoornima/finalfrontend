@@ -31,16 +31,31 @@ export const fetchUserEvents = async (token) => {
   return response.json();
 };
 
-export const createEvent = async (eventData, token) => {
-  const response = await fetch(`${API_URL}/api/events/add`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify(eventData),
-  });
-  return response.json();
+const createEvent = async (eventData, token) => {
+  const userId = jwt.decode(token).userId; // Assuming the token contains the userId (adjust as needed)
+  const eventWithUserId = { ...eventData, createdBy: userId };
+
+  try {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(eventWithUserId), // Send the event with createdBy
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to create event');
+    }
+
+    return data; // return the created event data
+  } catch (error) {
+    console.error('Error creating event:', error);
+    throw error; // propagate error
+  }
 };
 
 export const registerForEvent = async (eventId, token, userId) => {
