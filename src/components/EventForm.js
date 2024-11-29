@@ -12,41 +12,32 @@ const EventForm = ({ isEdit }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const fetchEventById = async (id) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/events/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data) {
+        setName(data.name);
+        setDate(data.date);
+        setStartTime(data.startTime);
+        setEndTime(data.endTime);
+        setLocation(data.location);
+        setDescription(data.description);
+      }
+    } catch (error) {
+      console.error('Error fetching event data', error);
+    }
+  };
+
+  // This useEffect will run when isEdit or id changes
   useEffect(() => {
-    if (isEdit) {
-      // Fetch event data for editing
-      // You can fetch the event here and populate the fields for editing
-      // Example:
-      // fetchEventById(id) and set the form state accordingly
-      // (Implement this if you are fetching data for the edit case)
-      const fetchEventById = async (id) => {
-        const token = localStorage.getItem('token');
-        try {
-          const response = await fetch(`${API_URL}/api/events/${id}`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-          const data = await response.json();
-          if (data) {
-            setName(data.name);
-            setDate(data.date);
-            setStartTime(data.startTime);
-            setEndTime(data.endTime);
-            setLocation(data.location);
-            setDescription(data.description);
-          }
-        } catch (error) {
-          console.error('Error fetching event data', error);
-        }
-      };
-      
-      useEffect(() => {
-        if (isEdit && id) {
-          fetchEventById(id);
-        }
-      }, [isEdit, id]);
-      
+    if (isEdit && id) {
+      fetchEventById(id); // Fetch event data if editing
     }
   }, [isEdit, id]);
 
@@ -66,8 +57,19 @@ const EventForm = ({ isEdit }) => {
 
   const handleDelete = async () => {
     const token = localStorage.getItem('token');
-    await deleteEvent(id, token); // Call delete function
-    navigate('/'); // Redirect after delete
+    setLoading(true); // Start loading on delete
+    try {
+      const response = await deleteEvent(id, token); // Call delete function
+      if (response.success) {
+        navigate('/'); // Redirect after successful delete
+      } else {
+        console.error('Error deleting event');
+      }
+    } catch (error) {
+      console.error('Error deleting event', error);
+    } finally {
+      setLoading(false); // Stop loading after delete
+    }e
   };
 
   return (
