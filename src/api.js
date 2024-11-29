@@ -1,5 +1,7 @@
 // src/api.js
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// If you are using the jsonwebtoken library for encoding/decoding JWT tokens
+import jwt from 'jsonwebtoken'; // Ensure this import exists at the top of your file
 
 export const registerUser = async (userData) => {
   const response = await fetch(`${API_URL}/api/auth/register`, {
