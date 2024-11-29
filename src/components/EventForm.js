@@ -9,6 +9,7 @@ const EventForm = ({ isEdit }) => {
   const [endTime, setEndTime] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false); // Define loading state
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -69,7 +70,7 @@ const EventForm = ({ isEdit }) => {
       console.error('Error deleting event', error);
     } finally {
       setLoading(false); // Stop loading after delete
-    }e
+    }
   };
 
   return (
@@ -110,8 +111,8 @@ const EventForm = ({ isEdit }) => {
       
       {/* Add Delete Button for Edit Mode */}
       {isEdit && (
-        <button type="button" onClick={handleDelete}>
-          Delete Event
+        <button type="button" onClick={handleDelete} disabled={loading}>
+          {loading ? 'Deleting...' : 'Delete Event'}
         </button>
       )}
     </form>
