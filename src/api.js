@@ -31,7 +31,7 @@ export const fetchUserEvents = async (token) => {
   return response.json();
 };
 
-const createEvent = async (eventData, token) => {
+export const createEvent = async (eventData, token) => {
   const userId = jwt.decode(token).userId; // Assuming the token contains the userId (adjust as needed)
   const eventWithUserId = { ...eventData, createdBy: userId };
 
